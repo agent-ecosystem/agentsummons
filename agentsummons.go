@@ -102,6 +102,13 @@ func Run(ctx context.Context, req Request) (*Result, error) {
 	res.ExitCode = cmd.ProcessState.ExitCode()
 
 	if ctxErr := ctx.Err(); ctxErr != nil {
+		// Windows reports a Kill as exit code 1, indistinguishable from a
+		// real harness exit 1; the ExitCode contract is -1 whenever the
+		// run was cut short. waitErr == nil means the harness finished
+		// before the kill landed — its real code stands then.
+		if waitErr != nil {
+			res.ExitCode = -1
+		}
 		return res, ctxErr
 	}
 	var exitErr *exec.ExitError

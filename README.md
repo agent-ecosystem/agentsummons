@@ -25,11 +25,18 @@ written.
 brew install agent-ecosystem/tap/agentsummons
 # or
 go install github.com/agent-ecosystem/agentsummons/cmd/agentsummons@latest
+# or, for Node and Python projects (real binary + thin run/build API):
+npm install agentsummons
+pip install agentsummons
 ```
 
 Prebuilt static binaries (darwin/linux/windows) are on the
 [releases page](https://github.com/agent-ecosystem/agentsummons/releases).
-As a library: `go get github.com/agent-ecosystem/agentsummons`.
+As a Go library: `go get github.com/agent-ecosystem/agentsummons`. The
+[npm](https://www.npmjs.com/package/agentsummons) and
+[PyPI](https://pypi.org/project/agentsummons/) packages bundle the
+platform binary and expose `run`/`build` over the JSON envelope contract;
+see `wrappers/`.
 
 ## CLI
 

@@ -52,3 +52,10 @@ AGENTSUMMONS_LIVE=all go test -run TestLive -v
   only ever imported from `_test.go` files; it is not part of the library's
   API surface.
 - `plans/` design/status docs that are not user documentation.
+- `wrappers/` npm and PyPI packages that deliver the Go binary plus a thin
+  `run`/`build` API over the `--json` envelopes. They are schema_version
+  consumers: any envelope or flag-surface change must be mirrored here (both
+  have fake-binary test suites, run in CI). Platform matrices in
+  `wrappers/npm/scripts/build-packages.mjs` and `wrappers/pypi/build_wheels.py`
+  move together with `.goreleaser.yaml`'s build matrix. Published by the
+  release workflow; versions always match the Go tag.

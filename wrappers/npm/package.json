@@ -1,0 +1,43 @@
+{
+  "name": "agentsummons",
+  "version": "0.0.0",
+  "description": "Invokes agent harnesses (Antigravity CLI, Claude Code, Codex CLI) headlessly. Node wrapper around the agentsummons Go CLI.",
+  "main": "lib/index.js",
+  "bin": {
+    "agentsummons": "bin/agentsummons.js"
+  },
+  "files": [
+    "bin",
+    "lib"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.js\""
+  },
+  "keywords": [
+    "agent",
+    "harness",
+    "claude-code",
+    "codex",
+    "antigravity",
+    "headless"
+  ],
+  "author": "Dachary Carey",
+  "license": "MIT",
+  "homepage": "https://github.com/agent-ecosystem/agentsummons",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agent-ecosystem/agentsummons.git",
+    "directory": "wrappers/npm"
+  },
+  "optionalDependencies": {
+    "agentsummons-darwin-arm64": "0.0.0",
+    "agentsummons-darwin-x64": "0.0.0",
+    "agentsummons-linux-arm64": "0.0.0",
+    "agentsummons-linux-x64": "0.0.0",
+    "agentsummons-win32-arm64": "0.0.0",
+    "agentsummons-win32-x64": "0.0.0"
+  }
+}

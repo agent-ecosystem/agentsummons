@@ -48,6 +48,12 @@ records against which release. When a harness releases a new version
    quirk appeared or disappeared, and bump the harness's `LastValidated`
    entry in the same change.
 
+This loop is also the pre-release gate, and ordering matters across the
+two repos: agentminutes depends on this module, so revalidate the flag
+surface and bump `LastValidated` here first and tag the agentsummons
+release, then move to agentminutes and run its drift-check process (the
+`drift probe` maintainer verb) against the same harness releases.
+
 The hermetic suite enforces the invariants that don't need a binary:
 prompt-is-always-last, the manifest and the validator can never disagree
 about what's supported, spec/LastValidated coverage stays paired, and

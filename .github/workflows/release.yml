@@ -79,10 +79,12 @@ jobs:
             fi
             npm publish "$1" --access public --provenance
           }
-          for pkg in dist-npm/platform/*/; do
+          for pkg in ./dist-npm/platform/*/; do
             publish "$pkg"
           done
-          publish dist-npm/agentsummons
+          # The ./ prefix keeps npm from reading the path as a GitHub
+          # owner/repo shorthand (it did, and refused with EALLOWGIT).
+          publish ./dist-npm/agentsummons
 
   publish-pypi:
     needs: release

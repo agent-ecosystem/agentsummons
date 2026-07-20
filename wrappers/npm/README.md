@@ -9,6 +9,12 @@ and experiments don't have to rediscover it.
 Installing this package delivers the real Go binary for your platform via
 an optional dependency (no install scripts), plus a thin JS API.
 
+Windows x64 is temporarily unavailable on npm (a registry naming issue is
+being worked out with npm support); use the
+[PyPI package](https://pypi.org/project/agentsummons/) or a
+[release binary](https://github.com/agent-ecosystem/agentsummons/releases)
+with `AGENTSUMMONS_BINARY` in the meantime. Windows arm64 is unaffected.
+
 ## CLI
 
 ```bash

@@ -37,7 +37,6 @@
     "agentsummons-darwin-x64": "0.0.0",
     "agentsummons-linux-arm64": "0.0.0",
     "agentsummons-linux-x64": "0.0.0",
-    "agentsummons-win32-arm64": "0.0.0",
-    "agentsummons-win32-x64": "0.0.0"
+    "agentsummons-win32-arm64": "0.0.0"
   }
 }

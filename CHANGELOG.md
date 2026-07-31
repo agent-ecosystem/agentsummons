@@ -6,6 +6,14 @@ the Go tag). Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1
 
 ## [Unreleased]
 
+### Fixed
+
+- The release workflow's `--release-notes` file was ignored because the
+  goreleaser config also disabled changelog generation, which publishes
+  an empty release body; the disable is gone (the flag alone suppresses
+  the commit-list changelog). The v0.3.0 release body was patched by
+  hand.
+
 ## [0.3.0] - 2026-07-30
 
 ### Added

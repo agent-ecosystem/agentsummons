@@ -6,10 +6,10 @@ release:
     name: agentsummons
 
 # Release notes come from CHANGELOG.md: the workflow extracts the tag's
-# section and passes it via --release-notes, so the generated commit-list
-# changelog is off.
-changelog:
-  disable: true
+# section and passes it via --release-notes, which itself suppresses the
+# generated commit-list changelog. Do not also set changelog.disable —
+# a disabled changelog makes goreleaser ignore --release-notes and
+# publish an empty release body (observed on v0.3.0).
 
 # goreleaser's default ldflags stamp main.version with the tag, so
 # `agentsummons --version` reports the release without a hardcoded

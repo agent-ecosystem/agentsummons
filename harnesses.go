@@ -21,21 +21,22 @@ type spec struct {
 var specs = map[ID]spec{
 	Antigravity: {
 		caps: Capabilities{
-			Harness:     Antigravity,
-			Binary:      "agy",
-			VersionArgs: []string{"--version"},
-			Prompt:      "-p <prompt>, assembled last (--print consumes the next argument)",
-			Workdir:     "--add-dir <dir> plus process cwd (agy ignores the cwd without the flag)",
-			Model:       `--model "<display name from agy models>"`,
-			Resume:      "--conversation <id>; the ref is discoverable only post-hoc (e.g. agentminutes sessions)",
-			// Keep the resume-ref note pointing at the upstream request; if
-			// it lands, headless runs gain an in-band ref and the post-hoc
-			// discovery caveat relaxes.
-			AutoApprove: "--dangerously-skip-permissions (the only non-interactive approval path)",
+			Harness:         Antigravity,
+			Binary:          "agy",
+			VersionArgs:     []string{"--version"},
+			Prompt:          "-p <prompt>, assembled last (--print consumes the next argument)",
+			Workdir:         "--add-dir <dir> plus process cwd (agy ignores the cwd without the flag)",
+			Model:           `--model "<display name from agy models>"`,
+			Resume:          "--conversation <id>; in-band multi-turn with JSONOutput (the envelope carries conversation_id), post-hoc discovery otherwise",
+			JSONOutput:      "--output-format json",
+			AutoApprove:     "--dangerously-skip-permissions (the only non-interactive approval path)",
+			JSONOutputShape: "envelope",
 			Notes: []string{
-				"headless runs never emit the conversation ID in-band, so resume refs need post-hoc discovery; upstream request: https://github.com/google-antigravity/antigravity-cli/issues/7",
-				"stdout is step narration plus a Summary of Work; treat transcripts as the authoritative record",
-				"-p under a non-TTY has been reported to drop the final response from stdout in some versions",
+				"the upstream request for an in-band conversation ID (https://github.com/google-antigravity/antigravity-cli/issues/7) landed in 1.1.8 as --output-format json/stream-json; text-mode headless runs still never emit it, so only they need post-hoc discovery (e.g. agentminutes sessions)",
+				"one -p invocation writes two conversations (a warm-up plus the real one), so post-hoc discovery must match on content (e.g. the recorded prompt), not recency alone (observed 1.1.4)",
+				"--conversation appends to the same conversation transcript rather than forking (observed 1.1.4; envelope conversation_id stability re-confirmed 1.1.8)",
+				"text-mode stdout is step narration plus a Summary of Work; --output-format json swaps it for a single result envelope (conversation_id, status, response, usage)",
+				"text-mode -p under a non-TTY has been reported to drop the final response from stdout in some versions",
 				"no tool-restriction flag exists; any read-only constraint is prompt-level only",
 				"Go TLS treats SSL_CERT_FILE as the entire trust store; a local CA needs a combined bundle",
 			},
@@ -52,6 +53,9 @@ var specs = map[ID]spec{
 			}
 			if req.Resume != "" {
 				args = append(args, "--conversation", req.Resume)
+			}
+			if req.JSONOutput {
+				args = append(args, "--output-format", "json")
 			}
 			args = append(args, req.ExtraArgs...)
 			// --print consumes the next argument, so -p and the prompt go last.
@@ -74,7 +78,7 @@ var specs = map[ID]spec{
 			JSONOutputShape: "envelope",
 			Notes: []string{
 				"headless runs do not register Glob/Grep unless named in --allowedTools (observed 2.1.197)",
-				"resume preserves the session_id (observed 2.1.205); chaining refs from each turn's envelope stays correct either way",
+				"resume preserves the session_id (observed 2.1.212); chaining refs from each turn's envelope stays correct either way",
 				"self-signed local HTTPS needs NODE_TLS_REJECT_UNAUTHORIZED=0 (WebFetch force-upgrades to HTTPS)",
 			},
 		},
@@ -117,6 +121,7 @@ var specs = map[ID]spec{
 			JSONOutputShape: "jsonl-events",
 			Notes: []string{
 				"--json emits a JSONL event stream, not one envelope; --output-last-message <path> (via ExtraArgs) captures the final answer reliably",
+				"exec resume appends to the same rollout file and preserves the session id (observed 0.144.6)",
 				"finer sandbox control is caller policy via ExtraArgs: --sandbox read-only, -c sandbox_workspace_write.network_access=true",
 				"do not set SSL_CERT_FILE to a bare local cert: it replaces the rustls trust store used to reach the backend (observed 0.144.1)",
 			},

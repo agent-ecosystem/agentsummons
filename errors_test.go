@@ -18,8 +18,8 @@ func TestErrorStrings(t *testing.T) {
 	}{
 		{
 			"unsupported",
-			&UnsupportedError{Harness: Antigravity, Option: "JSONOutput"},
-			[]string{"antigravity", "JSONOutput"},
+			&UnsupportedError{Harness: Antigravity, Option: "SessionID"},
+			[]string{"antigravity", "SessionID"},
 		},
 		{
 			"invalid request",

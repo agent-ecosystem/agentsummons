@@ -22,12 +22,13 @@ func TestBuildGolden(t *testing.T) {
 			req: Request{
 				Harness: Antigravity, Prompt: "hi", Workdir: "/w",
 				AutoApprove: true, Model: "Gemini 3.5 Flash (Medium)",
-				Resume: "conv-1", ExtraArgs: []string{"--print-timeout", "20m"},
+				Resume: "conv-1", JSONOutput: true,
+				ExtraArgs: []string{"--print-timeout", "20m"},
 			},
 			want: []string{
 				"agy", "--dangerously-skip-permissions", "--add-dir", "/w",
 				"--model", "Gemini 3.5 Flash (Medium)", "--conversation", "conv-1",
-				"--print-timeout", "20m", "-p", "hi",
+				"--output-format", "json", "--print-timeout", "20m", "-p", "hi",
 			},
 		},
 		{
@@ -146,7 +147,6 @@ func TestBuildUnsupportedOptions(t *testing.T) {
 	}{
 		{"antigravity session-id", Request{Harness: Antigravity, Prompt: "hi", Workdir: "/w", SessionID: "u"}, "SessionID"},
 		{"antigravity allowed-tools", Request{Harness: Antigravity, Prompt: "hi", Workdir: "/w", AllowedTools: []string{"Read"}}, "AllowedTools"},
-		{"antigravity json-output", Request{Harness: Antigravity, Prompt: "hi", Workdir: "/w", JSONOutput: true}, "JSONOutput"},
 		{"codex session-id", Request{Harness: Codex, Prompt: "hi", Workdir: "/w", SessionID: "u"}, "SessionID"},
 		{"codex allowed-tools", Request{Harness: Codex, Prompt: "hi", Workdir: "/w", AllowedTools: []string{"Read"}}, "AllowedTools"},
 	}

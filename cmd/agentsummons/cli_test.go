@@ -102,8 +102,8 @@ func TestRequestErrorExitCodes(t *testing.T) {
 	}{
 		{
 			"unsupported capability",
-			[]string{"build", "--harness", "antigravity", "-p", "hi", "--json-output"},
-			exitUsage, "does not support JSONOutput",
+			[]string{"build", "--harness", "antigravity", "-p", "hi", "--session-id", "s"},
+			exitUsage, "does not support SessionID",
 		},
 		{
 			"unknown harness",

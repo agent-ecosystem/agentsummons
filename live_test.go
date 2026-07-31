@@ -71,8 +71,67 @@ func TestLiveAntigravity(t *testing.T) {
 	if res.ExitCode != 0 {
 		t.Fatalf("exit %d, stderr: %s", res.ExitCode, res.Stderr)
 	}
-	// agy stdout under a non-TTY is best-effort (see Capabilities notes);
-	// a clean exit is the strongest hermetic assertion available here.
+	// agy text-mode stdout under a non-TTY is best-effort (see
+	// Capabilities notes); a clean exit is the strongest assertion
+	// available here.
+}
+
+// TestLiveAntigravityResume validates the in-band multi-turn loop that
+// landed in agy 1.1.8: turn 1's JSON envelope carries conversation_id,
+// turn 2 resumes with --conversation and echoes the same id (append, not
+// fork). Envelope parsing is deliberately caller-side: the library never
+// interprets harness output.
+func TestLiveAntigravityResume(t *testing.T) {
+	liveGate(t, Antigravity)
+	wd := t.TempDir()
+	res, err := Run(liveCtx(t), Request{
+		Harness: Antigravity, Prompt: "Reply with exactly: pong", Workdir: wd,
+		JSONOutput: true, AutoApprove: true,
+	})
+	if err != nil {
+		t.Fatalf("turn 1: %v", err)
+	}
+	if res.ExitCode != 0 {
+		t.Fatalf("turn 1 exit %d, stderr: %s", res.ExitCode, res.Stderr)
+	}
+	var envelope struct {
+		ConversationID string `json:"conversation_id"`
+		Response       string `json:"response"`
+	}
+	if err := json.Unmarshal(res.Stdout, &envelope); err != nil {
+		t.Fatalf("turn 1 stdout is not a JSON envelope: %v\n%s", err, res.Stdout)
+	}
+	if envelope.ConversationID == "" {
+		t.Fatalf("turn 1 envelope has no conversation_id (agy < 1.1.8?):\n%s", res.Stdout)
+	}
+	if !strings.Contains(strings.ToLower(envelope.Response), "pong") {
+		t.Errorf("turn 1 response = %q, want it to contain pong", envelope.Response)
+	}
+
+	res2, err := Run(liveCtx(t), Request{
+		Harness: Antigravity, Prompt: "Reply with exactly the same word you replied with before.",
+		Workdir: wd, Resume: envelope.ConversationID, JSONOutput: true, AutoApprove: true,
+	})
+	if err != nil {
+		t.Fatalf("turn 2 (resume %s): %v", envelope.ConversationID, err)
+	}
+	if res2.ExitCode != 0 {
+		t.Fatalf("turn 2 exit %d, stderr: %s", res2.ExitCode, res2.Stderr)
+	}
+	var envelope2 struct {
+		ConversationID string `json:"conversation_id"`
+		Response       string `json:"response"`
+	}
+	if err := json.Unmarshal(res2.Stdout, &envelope2); err != nil {
+		t.Fatalf("turn 2 stdout is not a JSON envelope: %v\n%s", err, res2.Stdout)
+	}
+	if envelope2.ConversationID != envelope.ConversationID {
+		t.Errorf("turn 2 conversation_id = %q, want %q (resume should append, not fork)", envelope2.ConversationID, envelope.ConversationID)
+	}
+	if !strings.Contains(strings.ToLower(envelope2.Response), "pong") {
+		t.Errorf("turn 2 response = %q, want it to recall pong (context carried across resume)", envelope2.Response)
+	}
+	t.Logf("resume conversation_id: turn1=%s turn2=%s", envelope.ConversationID, envelope2.ConversationID)
 }
 
 // TestLiveClaudeCode validates the full in-band multi-turn loop: preset

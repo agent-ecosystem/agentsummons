@@ -101,7 +101,7 @@ choice.
 
 | Harness | Binary | Model | Session ID | Resume | Allowed tools | JSON output | Auto-approve |
 |---|---|---|---|---|---|---|---|
-| antigravity | `agy` | `--model "<display name>"` | — | `--conversation <id>` | — | — | `--dangerously-skip-permissions` |
+| antigravity | `agy` | `--model "<display name>"` | — | `--conversation <id>` | — | `--output-format json` (envelope) | `--dangerously-skip-permissions` |
 | claude-code | `claude` | `--model <id>` | `--session-id <uuid>` | `--resume <session-id>` | `--allowedTools a,b` | `--output-format json` (envelope) | `--dangerously-skip-permissions` |
 | codex | `codex` | `-m <id>` | — | `exec resume <session-id>` | — | `--json` (JSONL events) | `--dangerously-bypass-approvals-and-sandbox` |
 
@@ -116,12 +116,23 @@ conversation is a sequence of discrete invocations naming the same session:
 
 1. Turn 1: `run` (claude-code: preset `--session-id` to know the ref up
    front).
-2. Get the session ref — in-band from stdout (claude-code envelope, codex
-   event stream), or post-hoc with `agentminutes sessions` (antigravity,
-   whose headless mode never emits the ref — there's an
-   [open upstream request](https://github.com/google-antigravity/antigravity-cli/issues/7)
-   to change that; if it lands, this caveat relaxes).
+2. Get the session ref in-band from stdout with `--json-output`: the
+   claude-code and antigravity envelopes and the codex event stream all
+   carry the session/conversation ID. Antigravity's envelope landed in
+   agy 1.1.8 (the
+   [upstream request](https://github.com/google-antigravity/antigravity-cli/issues/7)
+   for an in-band ref); on older releases, or in text mode, the ref is
+   only discoverable post-hoc with `agentminutes sessions`.
 3. Turn N: `run --resume <ref>`.
+
+Resume appends rather than forks on all three harnesses — same transcript
+file (claude-code, codex) or conversation directory (antigravity), same
+session identity (validated: antigravity 1.1.4, claude-code 2.1.205, codex
+0.144.6) — so the ref from turn 1 stays valid for every later turn. One
+antigravity trap when discovering refs post-hoc: a single `-p` invocation
+writes **two** conversations (a warm-up plus the real one), so discovery
+must match candidates on content (e.g. the recorded prompt), not recency
+alone.
 
 An explicit ref is required; the harnesses' continue-most-recent forms are
 deliberately not modeled (racy against any concurrent agent session), but

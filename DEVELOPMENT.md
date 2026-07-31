@@ -35,24 +35,31 @@ records against which release. When a harness releases a new version
    flag the spec table uses, including the resume forms.
 2. Run the live tests against the new release:
    `AGENTSUMMONS_LIVE=<id> go test -run TestLive -v`. They exercise
-   auto-approve, JSON output, session presetting, and the claude-code and
-   codex resume loops end-to-end. Antigravity's resume cannot be an
-   in-repo live test (the ref is only discoverable from the transcript
-   store, and depending on agentminutes for that — even test-only — would
-   create the module cycle the boundary forbids); validate it manually by
-   composing the two tools: `agentsummons run` turn 1, `agentminutes
-   sessions --harness antigravity --since <start> --until <end>` for the
-   conversation ID, then `agentsummons run --resume <id>` and confirm
-   recall.
+   auto-approve, JSON output, session presetting, and all three resume
+   loops end-to-end. Antigravity's resume test needs agy 1.1.8 or newer,
+   where `--output-format json` landed and turn 1's envelope carries the
+   conversation ID in-band. On older releases the ref only exists in the
+   transcript store, and depending on agentminutes for discovery (even
+   test-only) would create the module cycle the boundary forbids, so
+   validate those manually by composing the two tools: `agentsummons run`
+   turn 1, `agentminutes sessions --harness antigravity --since <start>
+   --until <end>` for the conversation ID, then `agentsummons run
+   --resume <id>` and confirm recall.
 3. Fix the spec table if anything moved, update the manifest notes if a
    quirk appeared or disappeared, and bump the harness's `LastValidated`
-   entry in the same change.
+   entry in the same change. Record anything user-visible (a capability
+   gained or lost, a caveat that relaxed) in `CHANGELOG.md` under
+   Unreleased.
 
 This loop is also the pre-release gate, and ordering matters across the
 two repos: agentminutes depends on this module, so revalidate the flag
-surface and bump `LastValidated` here first and tag the agentsummons
-release, then move to agentminutes and run its drift-check process (the
-`drift probe` maintainer verb) against the same harness releases.
+surface and bump `LastValidated` here first, promote the Unreleased
+section of `CHANGELOG.md` to the new version heading, and tag the
+agentsummons release; then move to agentminutes and run its drift-check
+process (the `drift probe` maintainer verb) against the same harness
+releases. The release workflow extracts the tag's changelog section for
+the GitHub release notes and fails the release if the section is
+missing, so the promote step cannot be skipped.
 
 The hermetic suite enforces the invariants that don't need a binary:
 prompt-is-always-last, the manifest and the validator can never disagree
@@ -66,11 +73,11 @@ spots: `Request` (request.go), `Capabilities` (capabilities.go), the
 `validate` switch and each harness's `assemble` (harnesses.go), the CLI
 flag surface (`cmd/agentsummons/flags.go`), the text renderer in
 `cmd/agentsummons/info.go`, the manifest-contract cases in
-`capabilities_test.go` (`TestUnsupportedMatchesManifest`), and the README
-capability matrix. The hermetic suite catches a validator/manifest
-mismatch, and `--json` output picks new `Capabilities` fields up
-automatically — but the `info` text output and the README matrix do not;
-check those two by hand.
+`capabilities_test.go` (`TestUnsupportedMatchesManifest`), the README
+capability matrix, and a `CHANGELOG.md` entry. The hermetic suite catches
+a validator/manifest mismatch, and `--json` output picks new
+`Capabilities` fields up automatically — but the `info` text output and
+the README matrix do not; check those two by hand.
 
 The deeper canary lives in agentminutes: its `drift probe` invokes the
 harnesses and parses the fresh transcripts, so one (paid) probe run

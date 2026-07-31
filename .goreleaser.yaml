@@ -5,6 +5,12 @@ release:
     owner: agent-ecosystem
     name: agentsummons
 
+# Release notes come from CHANGELOG.md: the workflow extracts the tag's
+# section and passes it via --release-notes, so the generated commit-list
+# changelog is off.
+changelog:
+  disable: true
+
 # goreleaser's default ldflags stamp main.version with the tag, so
 # `agentsummons --version` reports the release without a hardcoded
 # constant to bump.

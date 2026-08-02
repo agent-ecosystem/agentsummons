@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 344" role="img" aria-label="Terminal showing agentsummons doctor and run commands" style="max-width:100%;height:auto">
+  <rect x="0.5" y="0.5" width="559" height="343" rx="14" fill="#15171c" stroke="#2e323c"/>
+  <circle cx="24" cy="24" r="6" fill="#ff5f57"/>
+  <circle cx="44" cy="24" r="6" fill="#febc2e"/>
+  <circle cx="64" cy="24" r="6" fill="#28c840"/>
+  <text x="280" y="28" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12" fill="#8b8b93">agentsummons</text>
+  <line x1="0.5" y1="44" x2="559.5" y2="44" stroke="#2e323c"/>
+  <g font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="13" xml:space="preserve">
+    <text x="24" y="74"><tspan fill="#4ade80">$</tspan><tspan fill="#e4e4e7" dx="8">agentsummons doctor</tspan></text>
+    <text x="40" y="100"><tspan fill="#93c5fd">antigravity</tspan><tspan x="180" fill="#d4d4d8">agy 1.1.8</tspan><tspan x="320" fill="#4ade80">&#10003; validated</tspan></text>
+    <text x="40" y="122"><tspan fill="#93c5fd">claude-code</tspan><tspan x="180" fill="#d4d4d8">claude 2.1.205</tspan><tspan x="320" fill="#4ade80">&#10003; validated</tspan></text>
+    <text x="40" y="144"><tspan fill="#93c5fd">codex</tspan><tspan x="180" fill="#d4d4d8">codex 0.144.6</tspan><tspan x="320" fill="#4ade80">&#10003; validated</tspan></text>
+    <text x="24" y="182"><tspan fill="#4ade80">$</tspan><tspan fill="#e4e4e7" dx="8">agentsummons run --harness claude-code \</tspan></text>
+    <text x="48" y="204" fill="#e4e4e7">-p "Summarize this repo" --json</text>
+    <text x="24" y="238" fill="#8b8b93">{"schema_version": 1, "harness": "claude-code",</text>
+    <text x="24" y="260" fill="#8b8b93"> "harness_version": "2.1.205", "exit_code": 0,</text>
+    <text x="24" y="282" fill="#8b8b93"> "session_id": "9f2c&#8230;", "output": {&#8230;}}</text>
+    <text x="24" y="318"><tspan fill="#4ade80">$</tspan><tspan fill="#6b7280" dx="8">&#9608;</tspan></text>
+  </g>
+</svg>

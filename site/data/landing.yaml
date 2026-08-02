@@ -1,0 +1,75 @@
+# Landing page sections for the Lotus Docs homepage template.
+#
+# The theme ships its own data/landing.yaml and Hugo merges it underneath
+# this one, so any section not defined here renders with the theme's demo
+# copy. Explicitly disable theme sections we don't use (re-check when
+# updating the theme). Avoid '--' in prose here: Goldmark's typographer
+# renders it as an en dash in HTML, which breaks parity segment matching.
+
+imageCompare:
+  enable: false
+
+hero:
+  enable: true
+  weight: 10
+  template: hero
+
+  badge:
+    text: v0.3.0
+    color: primary
+    pill: false
+    soft: true
+
+  title: "agentsummons"
+  subtitle: Go library + CLI for invoking agent harnesses (**Antigravity CLI**, **Claude Code**, **Codex CLI**) in headless mode. One API, one CLI, every harness quirk owned once.
+
+  # Inline SVG terminal card (assets/images/terminal-hero.svg). Its text is
+  # in the DOM, so it's excluded from parity in agent-docs.config.yml.
+  image:
+    path: "images"
+    filename: "terminal-hero.svg"
+    alt: "Terminal showing agentsummons doctor and run commands"
+
+  ctaButton:
+    icon: rocket_launch
+    btnText: "Get Started"
+    url: "/docs/quickstart/"
+  cta2Button:
+    icon: code
+    btnText: "View on GitHub"
+    url: "https://github.com/agent-ecosystem/agentsummons"
+
+  info: "**Open Source** MIT Licensed."
+
+featureGrid:
+  enable: true
+  weight: 20
+  template: feature grid
+
+  title: Why agentsummons?
+  subtitle: Every headless-agent experiment rediscovers the same lore about binaries, permission-bypass flags, and argument ordering. agentsummons owns that knowledge once, so your scripts and experiments don't have to.
+
+  items:
+    - title: One API, three harnesses
+      icon: hub
+      description: Invoke Antigravity CLI, Claude Code, or Codex CLI through one Go API and one CLI. Per-harness quirks (argument ordering, flag names, exec subcommands) are implemented once, behind the interface.
+
+    - title: Multi-turn sessions
+      icon: forum
+      description: Resume conversations across discrete invocations on all three harnesses, with session refs carried in-band in JSON output.
+
+    - title: Container-ready
+      icon: deployed_code
+      description: Static binaries (CGO_ENABLED=0) bake into eval images with a single COPY. Run agentsummons in JSON mode as the container command and stdout carries exactly one envelope.
+
+    - title: Drift detection
+      icon: monitor_heart
+      description: Harness flags drift. The doctor command compares installed harness versions against the validated flag surface before an experiment burns tokens on a broken invocation.
+
+    - title: JSON envelope contract
+      icon: data_object
+      description: All JSON output carries a schema_version and is a cross-language contract. The npm and PyPI wrappers expose run/build over the same envelope.
+
+    - title: Loud, not silent
+      icon: campaign
+      description: Setting a field a harness can't express is an explicit UnsupportedError, never a silent drop. A nonzero harness exit is data, and timeouts return the partial result for archiving.

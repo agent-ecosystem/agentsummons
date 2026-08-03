@@ -6,6 +6,18 @@ the Go tag). Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-08-02
+
+### Changed
+
+- Revalidated the flag surface against antigravity 1.1.10
+  (`LastValidated`). No flags moved; the live resume loop re-confirmed
+  the stable envelope `conversation_id`.
+- New antigravity manifest note: since agy 1.1.9, print mode expands
+  slash commands and skills in the prompt, so a prompt starting with `/`
+  may resolve to a command instead of being sent verbatim;
+  `--disable-slash-commands` (via `ExtraArgs`) opts out.
+
 ### Fixed
 
 - The release workflow's `--release-notes` file was ignored because the
@@ -82,7 +94,8 @@ the Go tag). Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1
   typed capability manifests, loud `*UnsupportedError` rejection, and
   `--json` envelopes carrying `schema_version`.
 
-[Unreleased]: https://github.com/agent-ecosystem/agentsummons/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/agent-ecosystem/agentsummons/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/agent-ecosystem/agentsummons/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/agent-ecosystem/agentsummons/compare/v0.2.2...v0.3.0
 [0.2.2]: https://github.com/agent-ecosystem/agentsummons/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/agent-ecosystem/agentsummons/compare/v0.2.0...v0.2.1

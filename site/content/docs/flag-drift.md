@@ -25,7 +25,7 @@ validated versions and codex has moved ahead:
 
 ```
 $ agentsummons doctor
-antigravity  installed 1.1.8, validated 1.1.8 — clean
+antigravity  installed 1.1.10, validated 1.1.10 — clean
 claude-code  installed 2.1.212, validated 2.1.212 — clean
 codex        installed 0.148.2 > validated 0.146.0 — drift candidate; check for an agentsummons update
 ```

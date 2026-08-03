@@ -7,7 +7,7 @@
   <line x1="0.5" y1="44" x2="559.5" y2="44" stroke="#2e323c"/>
   <g font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="13" xml:space="preserve">
     <text x="24" y="74"><tspan fill="#4ade80">$</tspan><tspan fill="#e4e4e7" dx="8">agentsummons doctor</tspan></text>
-    <text x="40" y="100"><tspan fill="#93c5fd">antigravity</tspan><tspan x="180" fill="#d4d4d8">agy 1.1.8</tspan><tspan x="320" fill="#4ade80">&#10003; validated</tspan></text>
+    <text x="40" y="100"><tspan fill="#93c5fd">antigravity</tspan><tspan x="180" fill="#d4d4d8">agy 1.1.10</tspan><tspan x="320" fill="#4ade80">&#10003; validated</tspan></text>
     <text x="40" y="122"><tspan fill="#93c5fd">claude-code</tspan><tspan x="180" fill="#d4d4d8">claude 2.1.205</tspan><tspan x="320" fill="#4ade80">&#10003; validated</tspan></text>
     <text x="40" y="144"><tspan fill="#93c5fd">codex</tspan><tspan x="180" fill="#d4d4d8">codex 0.144.6</tspan><tspan x="320" fill="#4ade80">&#10003; validated</tspan></text>
     <text x="24" y="182"><tspan fill="#4ade80">$</tspan><tspan fill="#e4e4e7" dx="8">agentsummons run --harness claude-code \</tspan></text>

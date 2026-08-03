@@ -36,6 +36,7 @@ var specs = map[ID]spec{
 				"one -p invocation writes two conversations (a warm-up plus the real one), so post-hoc discovery must match on content (e.g. the recorded prompt), not recency alone (observed 1.1.4)",
 				"--conversation appends to the same conversation transcript rather than forking (observed 1.1.4; envelope conversation_id stability re-confirmed 1.1.8)",
 				"text-mode stdout is step narration plus a Summary of Work; --output-format json swaps it for a single result envelope (conversation_id, status, response, usage)",
+				"print mode expands slash commands and skills in the prompt since 1.1.9, so a prompt starting with / may resolve to a command instead of being sent verbatim; --disable-slash-commands (via ExtraArgs) opts out",
 				"text-mode -p under a non-TTY has been reported to drop the final response from stdout in some versions",
 				"no tool-restriction flag exists; any read-only constraint is prompt-level only",
 				"Go TLS treats SSL_CERT_FILE as the entire trust store; a local CA needs a combined bundle",

@@ -17,9 +17,9 @@ import (
 // a newer release (see DEVELOPMENT.md). Callers must treat the map as
 // read-only.
 var LastValidated = map[ID]string{
-	Antigravity: "1.1.10",
-	ClaudeCode:  "2.1.212",
-	Codex:       "0.146.0",
+	Antigravity: "1.1.19",
+	ClaudeCode:  "2.1.231",
+	Codex:       "0.149.1",
 }
 
 // versionRe extracts the first dotted version from version-command output.

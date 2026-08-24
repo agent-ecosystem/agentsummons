@@ -6,6 +6,29 @@ the Go tag). Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-08-24
+
+### Fixed
+
+- The npm wrapper ships the `agentsummons-win32-x64` platform package
+  again (restored in the build matrix, `SUPPORTED`, and
+  `optionalDependencies`): npm support resolved the registry naming
+  block that forced its removal, so Windows x64 installs no longer need
+  the PyPI package or a manually downloaded release binary.
+
+### Changed
+
+- Revalidated the flag surface against antigravity 1.1.19, claude-code
+  2.1.231, and codex 0.149.1 (`LastValidated`). No flags moved; the live
+  resume loops re-confirmed stable conversation/session IDs on all
+  three.
+- Antigravity caveats updated: since agy 1.1.18, a print-mode run whose
+  agent stream drops mid-run exits non-zero instead of reporting an
+  empty response as success. Since 1.1.11/1.1.12, read-only slash
+  commands in the prompt answer non-interactively without an agent turn,
+  and interactive-only ones fail loudly instead of falling through to
+  the model.
+
 ## [0.3.1] - 2026-08-02
 
 ### Changed
@@ -94,7 +117,8 @@ the Go tag). Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1
   typed capability manifests, loud `*UnsupportedError` rejection, and
   `--json` envelopes carrying `schema_version`.
 
-[Unreleased]: https://github.com/agent-ecosystem/agentsummons/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/agent-ecosystem/agentsummons/compare/v0.3.2...HEAD
+[0.3.2]: https://github.com/agent-ecosystem/agentsummons/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/agent-ecosystem/agentsummons/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/agent-ecosystem/agentsummons/compare/v0.2.2...v0.3.0
 [0.2.2]: https://github.com/agent-ecosystem/agentsummons/compare/v0.2.1...v0.2.2

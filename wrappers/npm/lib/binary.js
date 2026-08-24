@@ -1,15 +1,14 @@
 "use strict";
 
 // Node (platform, arch) pairs with a published platform package; mirrors
-// PLATFORMS in scripts/build-packages.mjs. Alphabetical. win32-x64 is
-// temporarily absent while npm blocks the package name (see the PLATFORMS
-// comment); the goreleaser release still builds that binary.
+// PLATFORMS in scripts/build-packages.mjs. Alphabetical.
 const SUPPORTED = new Set([
   "darwin-arm64",
   "darwin-x64",
   "linux-arm64",
   "linux-x64",
   "win32-arm64",
+  "win32-x64",
 ]);
 
 // binaryPath resolves the agentsummons binary: the AGENTSUMMONS_BINARY
@@ -20,14 +19,10 @@ function binaryPath() {
   if (override) return override;
   const key = `${process.platform}-${process.arch}`;
   if (!SUPPORTED.has(key)) {
-    const hint =
-      key === "win32-x64"
-        ? "the npm platform package is temporarily unavailable; download the Windows " +
-          "binary from https://github.com/agent-ecosystem/agentsummons/releases and set " +
-          "AGENTSUMMONS_BINARY, or use the PyPI package"
-        : "install the Go CLI instead (https://github.com/agent-ecosystem/agentsummons) " +
-          "and set AGENTSUMMONS_BINARY";
-    throw new Error(`agentsummons: no prebuilt binary for ${key}; ${hint}`);
+    throw new Error(
+      `agentsummons: no prebuilt binary for ${key}; install the Go CLI instead ` +
+        "(https://github.com/agent-ecosystem/agentsummons) and set AGENTSUMMONS_BINARY",
+    );
   }
   const exe = process.platform === "win32" ? "agentsummons.exe" : "agentsummons";
   try {

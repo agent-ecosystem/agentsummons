@@ -6,6 +6,23 @@ the Go tag). Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1
 
 ## [Unreleased]
 
+### Changed
+
+- Revalidated the flag surface against antigravity 1.2.2, claude-code
+  2.1.236, and codex 0.154.0 (`LastValidated`). No flags moved; the live
+  resume loops re-confirmed stable conversation/session IDs on all
+  three.
+- Antigravity caveats updated: since agy 1.1.27, headless runs list
+  refused tool actions as `denied_actions` in the JSON envelope instead
+  of skipping them silently, and since 1.1.28 fatal headless errors
+  carry a stable `error:` marker on stderr. Also since 1.1.28, an
+  expired `--print-timeout` (default 5m) returns the partial output and
+  exits 0 with only a stderr warning, so long runs should raise the
+  timeout via `ExtraArgs` to avoid truncation that looks like success.
+- New codex manifest note: `exec fork` (present by 0.154.0) forks a
+  session instead of appending, but subcommands are not reachable via
+  `ExtraArgs`, so `Resume` always means append.
+
 ## [0.3.2] - 2026-08-24
 
 ### Fixed

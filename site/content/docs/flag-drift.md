@@ -25,9 +25,9 @@ validated versions and codex has moved ahead:
 
 ```
 $ agentsummons doctor
-antigravity  installed 1.1.19, validated 1.1.19 — clean
-claude-code  installed 2.1.231, validated 2.1.231 — clean
-codex        installed 0.151.0 > validated 0.149.1 — drift candidate; check for an agentsummons update
+antigravity  installed 1.2.2, validated 1.2.2 — clean
+claude-code  installed 2.1.236, validated 2.1.236 — clean
+codex        installed 0.156.0 > validated 0.154.0 — drift candidate; check for an agentsummons update
 ```
 
 This run exits 1 because of the drift candidate, which is what makes
@@ -44,8 +44,8 @@ information in its `drift_hint` field:
 
 ```json
 "harness": "codex",
-"harness_version": "0.151.0",
-"drift_hint": "installed 0.151.0 is newer than flag-surface validated 0.149.1; check for an agentsummons update",
+"harness_version": "0.156.0",
+"drift_hint": "installed 0.156.0 is newer than flag-surface validated 0.154.0; check for an agentsummons update",
 ```
 
 What drift means in practice:

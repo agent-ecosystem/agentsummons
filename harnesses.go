@@ -34,10 +34,11 @@ var specs = map[ID]spec{
 			Notes: []string{
 				"the upstream request for an in-band conversation ID (https://github.com/google-antigravity/antigravity-cli/issues/7) landed in 1.1.8 as --output-format json/stream-json; text-mode headless runs still never emit it, so only they need post-hoc discovery (e.g. agentminutes sessions)",
 				"one -p invocation writes two conversations (a warm-up plus the real one), so post-hoc discovery must match on content (e.g. the recorded prompt), not recency alone (observed 1.1.4)",
-				"--conversation appends to the same conversation transcript rather than forking (observed 1.1.4; envelope conversation_id stability re-confirmed 1.1.19)",
-				"text-mode stdout is step narration plus a Summary of Work; --output-format json swaps it for a single result envelope (conversation_id, status, response, usage)",
+				"--conversation appends to the same conversation transcript rather than forking (observed 1.1.4; envelope conversation_id stability re-confirmed 1.2.2)",
+				"text-mode stdout is step narration plus a Summary of Work; --output-format json swaps it for a single result envelope (conversation_id, status, response, usage; since 1.1.27 refused tool actions are listed as denied_actions instead of being skipped silently)",
 				"print mode expands slash commands and skills in the prompt since 1.1.9, so a prompt starting with / may resolve to a command instead of being sent verbatim; --disable-slash-commands (via ExtraArgs) opts out; since 1.1.11/1.1.12 read-only commands answer without an agent turn and interactive-only ones fail loudly",
-				"text-mode -p under a non-TTY has been reported to drop the final response from stdout in some versions; 1.1.18 fixed the related dropped-stream case, which previously reported an empty response as a clean exit 0 and now exits non-zero",
+				"text-mode -p under a non-TTY has been reported to drop the final response from stdout in some versions; 1.1.18 fixed the related dropped-stream case, which previously reported an empty response as a clean exit 0 and now exits non-zero; since 1.1.28 fatal headless errors carry a stable error: marker on stderr",
+				"print mode waits at most --print-timeout (default 5m); since 1.1.28 expiry returns the partial output and exits 0 with only a stderr warning, so long runs need a raised --print-timeout (via ExtraArgs) to avoid truncation that looks like success",
 				"no tool-restriction flag exists; any read-only constraint is prompt-level only",
 				"Go TLS treats SSL_CERT_FILE as the entire trust store; a local CA needs a combined bundle",
 			},
@@ -79,7 +80,7 @@ var specs = map[ID]spec{
 			JSONOutputShape: "envelope",
 			Notes: []string{
 				"headless runs do not register Glob/Grep unless named in --allowedTools (observed 2.1.197)",
-				"resume preserves the session_id (observed 2.1.212; re-confirmed 2.1.231); chaining refs from each turn's envelope stays correct either way",
+				"resume preserves the session_id (observed 2.1.212; re-confirmed 2.1.236); chaining refs from each turn's envelope stays correct either way",
 				"self-signed local HTTPS needs NODE_TLS_REJECT_UNAUTHORIZED=0 (WebFetch force-upgrades to HTTPS)",
 			},
 		},
@@ -122,7 +123,7 @@ var specs = map[ID]spec{
 			JSONOutputShape: "jsonl-events",
 			Notes: []string{
 				"--json emits a JSONL event stream, not one envelope; --output-last-message <path> (via ExtraArgs) captures the final answer reliably",
-				"exec resume appends to the same rollout file and preserves the session id (observed 0.144.6; re-confirmed 0.149.1)",
+				"exec resume appends to the same rollout file and preserves the session id (observed 0.144.6; re-confirmed 0.154.0); a separate exec fork subcommand (present by 0.154.0) forks into a new session instead, but subcommands are not reachable via ExtraArgs, so Resume always means append here",
 				"finer sandbox control is caller policy via ExtraArgs: --sandbox read-only, -c sandbox_workspace_write.network_access=true",
 				"do not set SSL_CERT_FILE to a bare local cert: it replaces the rustls trust store used to reach the backend (observed 0.144.1)",
 			},

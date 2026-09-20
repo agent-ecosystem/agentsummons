@@ -6,6 +6,18 @@ the Go tag). Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1
 
 ## [Unreleased]
 
+### Changed
+
+- Revalidated the flag surface against antigravity 1.2.7, claude-code
+  2.1.267, and codex 0.155.1 (`LastValidated`). No flags moved; the live
+  resume loops re-confirmed stable conversation/session IDs on all
+  three.
+- Antigravity caveats updated for 1.2.6: the headless `--print-timeout`
+  default changed from 5m to unlimited (0 waits for the turn to
+  complete), so only an explicit limit via `ExtraArgs` can truncate a
+  long run; and agent or model API failures now print a structured
+  `AGY_ERROR: {...}` JSON line on stderr and exit 3 instead of 1.
+
 ## [0.3.3] - 2026-09-13
 
 ### Changed

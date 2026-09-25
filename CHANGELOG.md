@@ -6,6 +6,8 @@ the Go tag). Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-09-25
+
 ### Added
 
 - GitHub Copilot CLI (`copilot`) as the fourth harness, validated against
@@ -183,6 +185,7 @@ the Go tag). Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1
   `--json` envelopes carrying `schema_version`.
 
 [Unreleased]: https://github.com/agent-ecosystem/agentsummons/compare/v0.3.5...HEAD
+[0.4.0]: https://github.com/agent-ecosystem/agentsummons/compare/v0.3.5...v0.4.0
 [0.3.5]: https://github.com/agent-ecosystem/agentsummons/compare/v0.3.4...v0.3.5
 [0.3.4]: https://github.com/agent-ecosystem/agentsummons/compare/v0.3.3...v0.3.4
 [0.3.3]: https://github.com/agent-ecosystem/agentsummons/compare/v0.3.2...v0.3.3

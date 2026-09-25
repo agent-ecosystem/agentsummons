@@ -6,6 +6,22 @@ the Go tag). Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1
 
 ## [Unreleased]
 
+### Changed
+
+- Revalidated the flag surface against antigravity 1.2.11, claude-code
+  2.1.274, and codex 0.157.0 (`LastValidated`). No flags moved; the live
+  resume loops re-confirmed stable conversation/session IDs on all
+  three.
+- Antigravity caveats updated: since agy 1.2.9, headless runs no longer
+  leave daemon processes holding stdout open after exit (which could
+  hang a reader waiting for EOF), and still-running background tasks
+  are waited for until the `--print-timeout` deadline (capped at 30
+  minutes) instead of being cancelled shortly after the agent goes
+  idle; since 1.2.10 a run that streamed part of a response before a
+  model or agent error exits 3 with the `AGY_ERROR` line instead of 0,
+  with the partial response in the JSON error output; and 1.2.11 adds
+  `--effort`, reachable via `ExtraArgs`.
+
 ## [0.3.4] - 2026-09-20
 
 ### Changed

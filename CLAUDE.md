@@ -80,8 +80,8 @@ README, and the site):
 
 - `content/docs/harnesses.md`: capability matrix mirrors the spec table.
 - `content/docs/flag-drift.md`: doctor example bakes in real
-  `LastValidated` values (currently agy 1.2.7 / claude-code 2.1.267 /
-  codex 0.155.1) plus a fabricated newer codex as the drift candidate;
+  `LastValidated` values (currently agy 1.2.11 / claude-code 2.1.274 /
+  codex 0.157.0) plus a fabricated newer codex as the drift candidate;
   the `drift_hint` string mirrors `driftHint()` in `cmd/.../run.go`.
 - `content/docs/cli.md`: the `run --json` envelope example
   (claude-code 2.1.205) is deliberately older than validated so no

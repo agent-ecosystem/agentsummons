@@ -1,6 +1,6 @@
 ---
 title: Harness Capabilities
-description: The capability matrix for Antigravity CLI, Claude Code, and Codex CLI.
+description: The capability matrix for Antigravity CLI, Claude Code, Codex CLI, and GitHub Copilot CLI.
 icon: hub
 weight: 500
 ---
@@ -15,6 +15,7 @@ needs a cross-harness runner, such as:
 | antigravity | `agy` | `--model "<display name>"` | (none) | `--conversation <id>` | (none) | `--output-format json` (envelope) | `--dangerously-skip-permissions` |
 | claude-code | `claude` | `--model <id>` | `--session-id <uuid>` | `--resume <session-id>` | `--allowedTools a,b` | `--output-format json` (envelope) | `--dangerously-skip-permissions` |
 | codex | `codex` | `-m <id>` | (none) | `exec resume <session-id>` | (none) | `--json` (JSONL events) | `--dangerously-bypass-approvals-and-sandbox` |
+| copilot | `copilot` | `--model <id>` | `--session-id <uuid>` | `--resume=<session-id>` | `--available-tools=a,b` | `--output-format json` (JSONL events) | `--allow-all` |
 
 Use the `agentsummons info` command to view the full manifests, including
 per-harness quirk notes, such as TLS trust-store behavior, headless tool

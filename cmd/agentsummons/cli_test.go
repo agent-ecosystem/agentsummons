@@ -285,6 +285,7 @@ func TestDoctorJSON(t *testing.T) {
 		"antigravity": statusNotInstalled,
 		"claude-code": statusDrift,
 		"codex":       statusNotInstalled,
+		"copilot":     statusNotInstalled,
 	}
 	if !reflect.DeepEqual(statuses, want) {
 		t.Errorf("statuses = %v, want %v", statuses, want)
@@ -296,7 +297,7 @@ func TestInfoText(t *testing.T) {
 	if code != 0 {
 		t.Fatalf("exit %d", code)
 	}
-	for _, want := range []string{"antigravity (agy)", "claude-code (claude)", "codex (codex)", "(unsupported)"} {
+	for _, want := range []string{"antigravity (agy)", "claude-code (claude)", "codex (codex)", "copilot (copilot)", "(unsupported)"} {
 		if !strings.Contains(stdout, want) {
 			t.Errorf("info output missing %q", want)
 		}
@@ -381,7 +382,7 @@ func TestExitErrorString(t *testing.T) {
 }
 
 func TestHarnessHelpList(t *testing.T) {
-	if got, want := harnessHelpList(), `"antigravity", "claude-code", or "codex"`; got != want {
+	if got, want := harnessHelpList(), `"antigravity", "claude-code", "codex", or "copilot"`; got != want {
 		t.Errorf("harnessHelpList() = %s, want %s", got, want)
 	}
 }

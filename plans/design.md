@@ -1,7 +1,7 @@
 # agentsummons design
 
 Go library + CLI for invoking agent harnesses (Antigravity CLI, Claude Code,
-Codex CLI) in headless mode. It owns the flag knowledge that every headless
+Codex CLI, GitHub Copilot CLI) in headless mode. It owns the flag knowledge that every headless
 experiment otherwise rediscovers: which binary, which flags, prompt-passing
 mechanics, working-dir mechanics, and which optional capabilities (model
 pinning, session IDs, tool allowlists, JSON output) each harness supports and

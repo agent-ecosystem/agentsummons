@@ -1,5 +1,5 @@
 // Package agentsummons invokes agent harnesses (Antigravity CLI, Claude
-// Code, Codex CLI) in headless mode, owning the per-harness flag knowledge
+// Code, Codex CLI, GitHub Copilot CLI) in headless mode, owning the per-harness flag knowledge
 // so callers don't have to.
 //
 // agentsummons knows nothing about the transcripts a harness writes: its

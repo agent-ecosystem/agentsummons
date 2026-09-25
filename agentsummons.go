@@ -19,11 +19,12 @@ const (
 	Antigravity ID = "antigravity"
 	ClaudeCode  ID = "claude-code"
 	Codex       ID = "codex"
+	Copilot     ID = "copilot"
 )
 
 // Harnesses returns the supported harness IDs, alphabetical.
 func Harnesses() []ID {
-	return []ID{Antigravity, ClaudeCode, Codex}
+	return []ID{Antigravity, ClaudeCode, Codex, Copilot}
 }
 
 // InfoFor returns the capability manifest for one harness. The manifest is

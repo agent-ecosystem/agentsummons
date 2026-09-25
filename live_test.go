@@ -290,3 +290,81 @@ func findSessionKey(v any) string {
 	}
 	return ""
 }
+
+// TestLiveCopilot validates the full in-band multi-turn loop: preset
+// session ID, the sessionId echoed by the JSONL stream's result event,
+// then resume for a second turn. Stream parsing is deliberately
+// caller-side: the library never interprets harness output.
+func TestLiveCopilot(t *testing.T) {
+	liveGate(t, Copilot)
+	wd := t.TempDir()
+	sid := newUUID(t)
+	// Pin the installed release for the duration of the validation run.
+	env := []string{"COPILOT_AUTO_UPDATE=false"}
+	res, err := Run(liveCtx(t), Request{
+		Harness: Copilot, Prompt: "Reply with exactly: pong", Workdir: wd,
+		SessionID: sid, JSONOutput: true, AutoApprove: true, ExtraEnv: env,
+	})
+	if err != nil {
+		t.Fatalf("turn 1: %v", err)
+	}
+	if res.ExitCode != 0 {
+		t.Fatalf("turn 1 exit %d, stderr: %s", res.ExitCode, res.Stderr)
+	}
+	gotSID, answer := copilotStream(res.Stdout)
+	if gotSID != sid {
+		t.Errorf("result sessionId = %q, want preset %q", gotSID, sid)
+	}
+	if !strings.Contains(strings.ToLower(answer), "pong") {
+		t.Errorf("turn 1 answer = %q, want it to contain pong", answer)
+	}
+
+	res2, err := Run(liveCtx(t), Request{
+		Harness: Copilot, Prompt: "Reply with exactly the same word you replied with before.",
+		Workdir: wd, Resume: gotSID, JSONOutput: true, AutoApprove: true, ExtraEnv: env,
+	})
+	if err != nil {
+		t.Fatalf("turn 2 (resume): %v", err)
+	}
+	if res2.ExitCode != 0 {
+		t.Fatalf("turn 2 exit %d, stderr: %s", res2.ExitCode, res2.Stderr)
+	}
+	gotSID2, answer2 := copilotStream(res2.Stdout)
+	if gotSID2 != sid {
+		t.Errorf("turn 2 sessionId = %q, want %q (resume should append, not fork)", gotSID2, sid)
+	}
+	if !strings.Contains(strings.ToLower(answer2), "pong") {
+		t.Errorf("turn 2 answer = %q, want it to recall pong (context carried across resume)", answer2)
+	}
+	t.Logf("resume sessionId: turn1=%s turn2=%s", gotSID, gotSID2)
+}
+
+// copilotStream scans a copilot JSONL event stream for the result event's
+// sessionId and the last non-empty assistant.message content.
+func copilotStream(stream []byte) (sessionID, answer string) {
+	for _, line := range bytes.Split(stream, []byte("\n")) {
+		line = bytes.TrimSpace(line)
+		if len(line) == 0 {
+			continue
+		}
+		var ev struct {
+			Type      string `json:"type"`
+			SessionID string `json:"sessionId"`
+			Data      struct {
+				Content string `json:"content"`
+			} `json:"data"`
+		}
+		if json.Unmarshal(line, &ev) != nil {
+			continue
+		}
+		switch ev.Type {
+		case "result":
+			sessionID = ev.SessionID
+		case "assistant.message":
+			if ev.Data.Content != "" {
+				answer = ev.Data.Content
+			}
+		}
+	}
+	return sessionID, answer
+}

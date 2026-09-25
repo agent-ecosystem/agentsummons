@@ -21,7 +21,7 @@ hero:
     soft: true
 
   title: "agentsummons"
-  subtitle: Go library + CLI for invoking agent harnesses (**Antigravity CLI**, **Claude Code**, **Codex CLI**) in headless mode. One API, one CLI, every harness quirk owned once.
+  subtitle: Go library + CLI for invoking agent harnesses (**Antigravity CLI**, **Claude Code**, **Codex CLI**, **GitHub Copilot CLI**) in headless mode. One API, one CLI, every harness quirk owned once.
 
   # Inline SVG terminal card (assets/images/terminal-hero.svg). Its text is
   # in the DOM, so it's excluded from parity in agent-docs.config.yml.
@@ -50,13 +50,13 @@ featureGrid:
   subtitle: Every headless-agent experiment rediscovers the same lore about binaries, permission-bypass flags, and argument ordering. agentsummons owns that knowledge once, so your scripts and experiments don't have to.
 
   items:
-    - title: One API, three harnesses
+    - title: One API, four harnesses
       icon: hub
-      description: Invoke Antigravity CLI, Claude Code, or Codex CLI through one Go API and one CLI. Per-harness quirks (argument ordering, flag names, exec subcommands) are implemented once, behind the interface.
+      description: Invoke Antigravity CLI, Claude Code, Codex CLI, or GitHub Copilot CLI through one Go API and one CLI. Per-harness quirks (argument ordering, flag names, exec subcommands) are implemented once, behind the interface.
 
     - title: Multi-turn sessions
       icon: forum
-      description: Resume conversations across discrete invocations on all three harnesses, with session refs carried in-band in JSON output.
+      description: Resume conversations across discrete invocations on all four harnesses, with session refs carried in-band in JSON output.
 
     - title: Container-ready
       icon: deployed_code

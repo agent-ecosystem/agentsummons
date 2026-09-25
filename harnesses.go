@@ -153,6 +153,61 @@ var specs = map[ID]spec{
 			return append(args, req.Prompt)
 		},
 	},
+	Copilot: {
+		caps: Capabilities{
+			Harness:         Copilot,
+			Binary:          "copilot",
+			VersionArgs:     []string{"--version"},
+			Prompt:          "-p <prompt>",
+			Workdir:         "process cwd (-C <dir> also exists, via ExtraArgs)",
+			Model:           "--model <id> (e.g. claude-sonnet-5, gpt-5.3-codex, or auto)",
+			SessionID:       "--session-id <uuid>",
+			Resume:          "--resume=<session-id>; fully in-band multi-turn (the final result event carries sessionId)",
+			AllowedTools:    "--available-tools=<comma-joined>",
+			JSONOutput:      "--output-format json",
+			AutoApprove:     "--allow-all (the documented equivalent of --yolo: --allow-all-tools --allow-all-paths --allow-all-urls)",
+			JSONOutputShape: "jsonl-events",
+			Notes: []string{
+				"--output-format json emits a JSONL event stream whose final line is a result event carrying sessionId, exitCode, and usage; the answer text is the content of assistant.message events (observed 1.0.88)",
+				"resume appends to the same session and preserves the session id (observed 1.0.88); --resume takes an optional value (bare --resume opens an interactive picker), so it is passed as one --resume=<id> argument",
+				"--session-id resumes an existing session when the UUID already exists instead of failing, so a preset ref must be fresh",
+				"without a bypass flag a headless run still executes read-only tools, but every write (file creation, shell redirection, touch) fails with \"Permission denied and could not request permission from user\" and the run still exits 0 with a result event, so a task that needed writes can look like a clean success (observed 1.0.88)",
+				"--allow-all-tools alone (via ExtraArgs) auto-approves tools while keeping path and URL checks; COPILOT_ALLOW_ALL=true (via ExtraEnv) additionally trusts the working directory, which loads its hooks, plugins, and MCP servers",
+				"--available-tools also drops the built-in GitHub MCP server's tools, not just built-in tools (observed 1.0.88: view,grep left exactly those two); --allow-tool/--deny-tool (via ExtraArgs) shape permissions rather than availability",
+				"the built-in GitHub MCP server connects on every run; --disable-builtin-mcps (via ExtraArgs) skips it",
+				"auto-update is on by default outside CI (detected via CI, BUILD_NUMBER, RUN_ID, or SYSTEM_COLLECTIONURI); --no-auto-update (via ExtraArgs) or COPILOT_AUTO_UPDATE=false (via ExtraEnv) pins the installed release",
+				"-s/--silent (via ExtraArgs) strips the stats footer from text-mode stdout; --usage-output-file <path> writes final usage statistics as JSON",
+				"non-interactive auth: COPILOT_GITHUB_TOKEN, GH_TOKEN, or GITHUB_TOKEN (in that order of precedence) override stored credentials",
+			},
+		},
+		assemble: func(req Request) []string {
+			args := []string{"copilot"}
+			if req.AutoApprove {
+				args = append(args, "--allow-all")
+			}
+			if req.Model != "" {
+				args = append(args, "--model", req.Model)
+			}
+			if req.SessionID != "" {
+				args = append(args, "--session-id", req.SessionID)
+			}
+			if req.Resume != "" {
+				// --resume's value is optional, so join it to keep the
+				// argument unambiguous.
+				args = append(args, "--resume="+req.Resume)
+			}
+			if len(req.AllowedTools) > 0 {
+				// Variadic flag: the joined form keeps it from swallowing
+				// ExtraArgs or the prompt.
+				args = append(args, "--available-tools="+strings.Join(req.AllowedTools, ","))
+			}
+			if req.JSONOutput {
+				args = append(args, "--output-format", "json")
+			}
+			args = append(args, req.ExtraArgs...)
+			return append(args, "-p", req.Prompt)
+		},
+	},
 }
 
 // specFor resolves the spec table entry for id, the shared lookup behind

@@ -6,6 +6,20 @@ the Go tag). Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1
 
 ## [Unreleased]
 
+### Added
+
+- GitHub Copilot CLI (`copilot`) as the fourth harness, validated against
+  1.0.88. Every `Request` field maps to a flag: `--model`, `--session-id`
+  (preset), `--resume=<id>`, `--available-tools=<comma-joined>`,
+  `--output-format json` (a JSONL event stream whose final `result` event
+  carries the session ID), and `--allow-all` for `AutoApprove`. The live
+  loop confirmed that resume appends to the same session and preserves
+  the preset ID. Manifest notes cover the headless permission model
+  (without a bypass flag, read-only tools run but writes are denied and
+  the run still exits 0), the narrower `--allow-all-tools` and
+  `COPILOT_ALLOW_ALL=true` paths, the built-in GitHub MCP server, and
+  auto-update pinning.
+
 ## [0.3.5] - 2026-09-25
 
 ### Changed

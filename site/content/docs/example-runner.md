@@ -90,7 +90,7 @@ The behaviors this encodes, made explicit:
   The other harnesses hand back their ref in the first turn's output
   instead.
 - **Resume is uniform.** The caller stores one string from turn 1 and
-  sets `Resume` on every later turn. The three different resume syntaxes
+  sets `Resume` on every later turn. The differing resume syntaxes
   live in agentsummons, and the append-rather-than-fork behavior is
   documented in [Multi-Turn Sessions](/docs/multi-turn/).
 - **Permission policy stays in the caller.** agentsummons never

@@ -8,19 +8,19 @@ weight: 600
 Harness session state lives on disk in each harness's own store, so a
 conversation is a sequence of discrete invocations naming the same session:
 
-1. Turn 1: `run` (claude-code: preset `--session-id` to know the ref up
-   front).
+1. Turn 1: `run` (claude-code and copilot: preset `--session-id` to know
+   the ref up front).
 2. Get the session ref in-band from stdout with JSON output: the claude-code
-   and antigravity envelopes and the codex event stream all carry the
-   session/conversation ID. Antigravity's envelope landed in agy 1.1.8 (the
+   and antigravity envelopes and the codex and copilot event streams all
+   carry the session/conversation ID. Antigravity's envelope landed in agy 1.1.8 (the
    [upstream request](https://github.com/google-antigravity/antigravity-cli/issues/7)
    for an in-band ref); on older releases, or in text mode, the ref is only
    discoverable post-hoc with `agentminutes sessions`.
 3. Turn N: `run --resume <ref>`.
 
-Resume appends rather than forks on all three harnesses: same transcript
-file (claude-code, codex) or conversation directory (antigravity), same
-session identity. The ref from turn 1 stays valid for every later turn.
+Resume appends rather than forks on all four harnesses: same transcript
+file (claude-code, codex, copilot) or conversation directory (antigravity),
+same session identity. The ref from turn 1 stays valid for every later turn.
 
 One antigravity trap when discovering refs post-hoc: a single `-p`
 invocation writes **two** conversations (a warm-up plus the real one), so
@@ -75,11 +75,12 @@ agentsummons run --harness antigravity --resume "$REF" \
 The behaviors these examples encode:
 
 - The caller stores one string and passes it back as `--resume`. Which
-  flag that becomes (`--resume`, `--conversation`, or codex's
-  `exec resume` subcommand) is agentsummons's problem.
+  flag that becomes (`--resume`, `--conversation`, copilot's joined
+  `--resume=<id>`, or codex's `exec resume` subcommand) is agentsummons's
+  problem.
 - The ref extraction differs per harness, and only where it has to: the
-  codex variant of turn 1 reads the session ID from its JSONL event
-  stream rather than a single envelope.
+  codex and copilot variants of turn 1 read the session ID from their
+  JSONL event streams rather than a single envelope.
 - `Result.SessionID` (and the `session_id` field in `run --json`'s
   envelope) echoes a preset identity. agentsummons never parses refs out
   of harness output for you; that stays in-band, in the harness's own

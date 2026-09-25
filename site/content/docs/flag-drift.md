@@ -20,7 +20,7 @@ coverage.
 
 ## Example: what doctor reports
 
-This is a `doctor` run on a machine where two harnesses match their
+This is a `doctor` run on a machine where three harnesses match their
 validated versions and codex has moved ahead:
 
 ```
@@ -28,6 +28,7 @@ $ agentsummons doctor
 antigravity  installed 1.2.11, validated 1.2.11 — clean
 claude-code  installed 2.1.274, validated 2.1.274 — clean
 codex        installed 0.159.0 > validated 0.157.0 — drift candidate; check for an agentsummons update
+copilot      installed 1.0.88, validated 1.0.88 — clean
 ```
 
 This run exits 1 because of the drift candidate, which is what makes

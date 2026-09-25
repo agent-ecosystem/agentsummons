@@ -44,7 +44,7 @@ brews:
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
     homepage: https://github.com/agent-ecosystem/agentsummons
-    description: Invoke agent harnesses (Antigravity CLI, Claude Code, Codex CLI) headlessly
+    description: Invoke agent harnesses (Antigravity CLI, Claude Code, Codex CLI, GitHub Copilot CLI) headlessly
     license: MIT
     install: |
       bin.install "agentsummons"

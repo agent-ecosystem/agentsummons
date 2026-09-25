@@ -78,6 +78,30 @@ func TestBuildGolden(t *testing.T) {
 			req:  Request{Harness: Codex, Prompt: "hi", Workdir: "/w", Resume: "sess-1", Model: "gpt-5.6-terra"},
 			want: []string{"codex", "exec", "resume", "--skip-git-repo-check", "-m", "gpt-5.6-terra", "sess-1", "hi"},
 		},
+		{
+			name: "copilot minimal",
+			req:  Request{Harness: Copilot, Prompt: "hi", Workdir: "/w"},
+			want: []string{"copilot", "-p", "hi"},
+		},
+		{
+			name: "copilot full",
+			req: Request{
+				Harness: Copilot, Prompt: "hi", Workdir: "/w",
+				AutoApprove: true, Model: "claude-sonnet-5", SessionID: "u-1",
+				AllowedTools: []string{"view", "grep"}, JSONOutput: true,
+				ExtraArgs: []string{"--no-auto-update"},
+			},
+			want: []string{
+				"copilot", "--allow-all", "--model", "claude-sonnet-5",
+				"--session-id", "u-1", "--available-tools=view,grep",
+				"--output-format", "json", "--no-auto-update", "-p", "hi",
+			},
+		},
+		{
+			name: "copilot resume joins the optional value",
+			req:  Request{Harness: Copilot, Prompt: "hi", Workdir: "/w", Resume: "s-1"},
+			want: []string{"copilot", "--resume=s-1", "-p", "hi"},
+		},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {

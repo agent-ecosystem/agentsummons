@@ -1,5 +1,6 @@
 """Python wrapper around the agentsummons Go CLI, which invokes agent
-harnesses (Antigravity CLI, Claude Code, Codex CLI) headlessly.
+harnesses (Antigravity CLI, Claude Code, Codex CLI, GitHub Copilot CLI)
+headlessly.
 
 The wheel bundles the real binary; ``run`` and ``build`` shell out to it
 with ``--json`` and return the parsed envelope dict. Envelope keys stay

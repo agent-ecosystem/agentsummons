@@ -20,6 +20,7 @@ var LastValidated = map[ID]string{
 	Antigravity: "1.2.11",
 	ClaudeCode:  "2.1.274",
 	Codex:       "0.157.0",
+	Copilot:     "1.0.88",
 }
 
 // versionRe extracts the first dotted version from version-command output.

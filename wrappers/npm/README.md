@@ -3,7 +3,7 @@
 Node wrapper around
 [agentsummons](https://github.com/agent-ecosystem/agentsummons), a Go
 library + CLI that invokes agent harnesses (Antigravity CLI, Claude Code,
-Codex CLI) headlessly: it owns the per-harness flag knowledge so scripts
+Codex CLI, GitHub Copilot CLI) headlessly: it owns the per-harness flag knowledge so scripts
 and experiments don't have to rediscover it.
 
 Installing this package delivers the real Go binary for your platform via

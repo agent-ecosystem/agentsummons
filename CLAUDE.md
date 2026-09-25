@@ -1,10 +1,10 @@
 # agentsummons
 
 Go library + CLI for invoking agent harnesses (Antigravity CLI, Claude
-Code, Codex CLI) headlessly. Companion to agentminutes: agentsummons
+Code, Codex CLI, GitHub Copilot CLI) headlessly. Companion to agentminutes: agentsummons
 convenes the meeting, agentminutes takes the minutes. `plans/design.md`
 holds the design rationale; `DEVELOPMENT.md` the flag-knowledge
-maintenance loop.
+maintenance loop and the add-a-harness checklist.
 
 ## Commands
 
@@ -81,7 +81,7 @@ README, and the site):
 - `content/docs/harnesses.md`: capability matrix mirrors the spec table.
 - `content/docs/flag-drift.md`: doctor example bakes in real
   `LastValidated` values (currently agy 1.2.11 / claude-code 2.1.274 /
-  codex 0.157.0) plus a fabricated newer codex as the drift candidate;
+  codex 0.157.0 / copilot 1.0.88) plus a fabricated newer codex as the drift candidate;
   the `drift_hint` string mirrors `driftHint()` in `cmd/.../run.go`.
 - `content/docs/cli.md`: the `run --json` envelope example
   (claude-code 2.1.205) is deliberately older than validated so no

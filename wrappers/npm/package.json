@@ -1,7 +1,7 @@
 {
   "name": "agentsummons",
   "version": "0.0.0",
-  "description": "Invokes agent harnesses (Antigravity CLI, Claude Code, Codex CLI) headlessly. Node wrapper around the agentsummons Go CLI.",
+  "description": "Invokes agent harnesses (Antigravity CLI, Claude Code, Codex CLI, GitHub Copilot CLI) headlessly. Node wrapper around the agentsummons Go CLI.",
   "main": "lib/index.js",
   "bin": {
     "agentsummons": "bin/agentsummons.js"

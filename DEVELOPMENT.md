@@ -35,7 +35,7 @@ records against which release. When a harness releases a new version
    flag the spec table uses, including the resume forms.
 2. Run the live tests against the new release:
    `AGENTSUMMONS_LIVE=<id> go test -run TestLive -v`. They exercise
-   auto-approve, JSON output, session presetting, and all three resume
+   auto-approve, JSON output, session presetting, and all four resume
    loops end-to-end. Antigravity's resume test needs agy 1.1.8 or newer,
    where `--output-format json` landed and turn 1's envelope carries the
    conversation ID in-band. On older releases the ref only exists in the
@@ -83,6 +83,102 @@ The deeper canary lives in agentminutes: its `drift probe` invokes the
 harnesses and parses the fresh transcripts, so one (paid) probe run
 exercises both this repo's flag surface (invocation-time failures) and
 agentminutes' format surface (parse-time failures).
+
+## Adding a harness
+
+Copilot CLI (September 2026) is the reference change for this: one commit
+touching every spot below. Work in this order so the spec table is
+written from observed behavior, not from docs alone.
+
+### Choosing one
+
+The bar, in the order it has actually decided things: a documented
+single-shot headless mode with the prompt as an argument; a fixed default
+tool set, so a fresh install with no config is a representative run (an
+extension-first design like Pi has no "average user" to validate
+against); one on-disk transcript per session in a line-oriented format,
+because agentminutes' adapters account per line and a shared SQLite
+store would be a new adapter shape; a session id that appears both on
+stdout (JSON mode) and in the transcript, so the two tools can join on
+it; and auth that works from an environment variable. Adoption breaks
+ties. Check that the vendor is not sunsetting the product (Gemini CLI was
+folded into Antigravity in June 2026 while still shipping weekly).
+
+### Ground the flags with real runs first
+
+Read `--help` (and any `help environment`-style page) and map each
+`Request` field to a flag. Then, before writing any Go, run the probes
+below in a fresh temp directory with stdin closed (`</dev/null`), the way
+`Run` invokes the binary. Each costs one premium request; together they
+cost less than one wrong spec entry.
+
+1. Minimal headless run with JSON output and a preset session id.
+   Confirm: no folder-trust or telemetry prompt blocks a non-TTY run;
+   the stdout shape (envelope or JSONL) and where the session id
+   appears in it; the transcript path and that the preset id names it;
+   the exit code.
+2. Resume by that id. Confirm the same id comes back and the transcript
+   grew rather than a second one appearing.
+3. The tool-restriction flag in the form you plan to emit. Confirm from
+   the output which tools the model actually saw.
+4. A prompt that needs a read-only tool, then one that needs a write,
+   both with no bypass flag. Record what is denied, what still runs,
+   and the exit code (Copilot denies writes and still exits 0).
+5. The write again with the bypass flag. Confirm the file exists.
+
+Prefer the joined `--flag=value` form whenever a flag's value is
+optional (bare `--resume` opening a picker) or variadic (a tool list
+that would otherwise swallow `ExtraArgs` or the prompt). `AutoApprove`
+maps to the harness's own documented full bypass (the `--yolo`
+equivalent), never a narrower auto-approve; narrower paths go in the
+notes as `ExtraArgs` options. `Workdir` is the process cwd unless the
+harness ignores it (agy). Anything that surprised you in a probe is a
+manifest note with an `(observed <version>)` tag.
+
+### The fan-out
+
+Code (the hermetic suite catches most omissions, alphabetical order
+included):
+
+- `agentsummons.go`: the `ID` constant and `Harnesses()`. The string
+  must match the agentminutes harness id; keep it short and lowercase
+  like the existing ones.
+- `harnesses.go`: the spec entry. `versions.go`: `LastValidated`.
+- `build_test.go`: minimal, full, and resume golden cases; add
+  `TestBuildUnsupportedOptions` cases for each field the harness lacks.
+- `live_test.go`: a preset-then-resume loop (or in-band capture where
+  presetting is unsupported), with a caller-side parser for the stdout
+  shape. Run it: `AGENTSUMMONS_LIVE=<id> go test -run TestLive -v`.
+- `cmd/agentsummons/cli_test.go`: the doctor status map, the `info`
+  text expectations, and `TestHarnessHelpList`.
+- `cmd/agentsummons/flags.go`: the "(x only)" hints on `--session-id`
+  and `--allowed-tools` if the harness supports them.
+
+Docs and metadata (nothing enforces these; grep for the previous
+harness's name and for "three"/"four"):
+
+- `README.md` description and capability matrix; `doc.go`; `CLAUDE.md`
+  description and the validated-versions parenthetical; `plans/design.md`
+  description; `.goreleaser.yaml` description; `CHANGELOG.md` Unreleased.
+- `wrappers/npm/package.json` and `wrappers/pypi/pyproject.toml`
+  descriptions and keywords, both wrapper READMEs, and the PyPI
+  `__init__.py` docstring. The wrapper tests are harness-agnostic.
+- Site: `content/_index.md` and `content/docs/_index.md` descriptions,
+  `docs/harnesses.md` matrix, `docs/multi-turn.md` (which harnesses
+  preset ids, which carry them in envelopes versus event streams, the
+  resume-flag list), `docs/flag-drift.md` doctor example (a new line in
+  `%-12s` format), `data/landing.yaml` (subtitle, "One API, N harnesses",
+  feature descriptions), `sharing-image.html` plus a
+  `generate_sharing_image` re-render, and `assets/images/terminal-hero.svg`
+  (a new doctor row means shifting every later `y` by 22 and growing the
+  height and viewBox to match).
+- Then: `site/check_prose_style`, `vale --config site/.vale.ini
+  README.md`, `hugo` build, and `afdocs check` against `hugo server
+  -p 1717` (run from the sibling afdocs checkout if it is not on PATH;
+  `content-negotiation` fails locally by design).
+
+Finish with the agentminutes side: a locator and adapter for the
+transcript format, using the event types recorded during the probes.
 
 ## Testing notes
 

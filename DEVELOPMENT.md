@@ -173,12 +173,45 @@ harness's name and for "three"/"four"):
   (a new doctor row means shifting every later `y` by 22 and growing the
   height and viewBox to match).
 - Then: `site/check_prose_style`, `vale --config site/.vale.ini
-  README.md`, `hugo` build, and `afdocs check` against `hugo server
-  -p 1717` (run from the sibling afdocs checkout if it is not on PATH;
-  `content-negotiation` fails locally by design).
+  README.md`, `hugo` build, and `npm run test:agent-docs:local` from
+  `site/` (`npm ci` there first; it serves the working tree and runs the
+  pinned afdocs against it, skipping the two checks only Dreamhost's
+  Apache config can answer). CI runs the same script on every pull
+  request touching `site/**`. After deploying with `site/build_and_sync`,
+  run `npm run test:agent-docs` from `site/`, or dispatch the
+  "Agent-Friendly Docs (live site)" workflow, to cover the skipped two.
 
 Finish with the agentminutes side: a locator and adapter for the
 transcript format, using the event types recorded during the probes.
+
+## Keeping afdocs current
+
+`site/package.json` pins the afdocs version; a new afdocs release usually
+adds checks, so bumping it can surface warns that were not there before.
+Bump with `npm install -D afdocs@latest` in `site/`, run
+`npm run test:agent-docs:local`, and fix what it reports before
+committing the lockfile. The afdocs migration guide for the release says
+which checks are new and how scores move.
+
+A warn does not fail the test, by design: the check ran and the site is
+usable, the result is just not the best one available. So read the
+per-check lines rather than the exit code alone. `npx afdocs check <url>
+--fixes` prints the fix advice for a single warn, and `--format
+scorecard` gives the weighted score the vitest output does not show.
+
+Two things in the site exist only to satisfy checks, and a theme or
+template change can quietly undo either. `layouts/partials/absolute-links.html`
+rewrites root-relative markdown link destinations to absolute ones, for
+`markdown-link-portability`; content keeps authoring `](/docs/...)`, and
+only the markdown output is rewritten. `layouts/docs/baseof.html` renders
+the sidebar nav after `</main>`, so page content leads the DOM, for
+`content-start-position`; the sidebar is `position: fixed` so the
+rendered page is unaffected, and the skip link above `<main>` keeps
+keyboard navigation reachable.
+
+`.github/workflows/agent-docs.yml` pins the Hugo version so a Hugo
+release cannot fail a pull request that did not touch the site. Move it
+when the version on the machine that runs `site/build_and_sync` moves.
 
 ## Testing notes
 

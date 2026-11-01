@@ -6,6 +6,32 @@ the Go tag). Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-10-31
+
+### Changed
+
+- Revalidated the flag surface against antigravity 1.4.12, claude-code
+  2.1.309, codex 0.166.0, and copilot 1.0.105 (`LastValidated`). No
+  flags moved; the live resume loops re-confirmed stable
+  conversation/session IDs on all four.
+- Antigravity caveats updated: since agy 1.4.11 the JSON result carries
+  a `finished_reason` field (`print_timeout`, `interrupted`, or
+  `error`) when a turn ended early, so a truncated answer is
+  distinguishable from a complete one; `--effort` gained `xhigh`;
+  `--mode` and `--sandbox` are noted as `ExtraArgs` options, with the
+  1.3.2 change that `--dangerously-skip-permissions` no longer
+  auto-approves plans in plan mode; and since 1.3.4 an unknown
+  `--agent` exits 1 in headless runs instead of running the default.
+- Copilot caveats updated: only the exact spelling `COPILOT_ALLOW_ALL=true`
+  trusts the working directory (other truthy spellings only
+  auto-approve tools), and `--trust-folder` (since 1.0.100) trusts it
+  for one prompt-mode session; the built-in MCP set now has two
+  servers (`github-mcp-server`, `githubiq`), both skipped by
+  `--disable-builtin-mcps`; `--resume` also accepts a session name or
+  ID prefix; `--reasoning-effort` and `--assisted-approval` are noted
+  as `ExtraArgs` options, the latter taking precedence over
+  `--allow-all-tools` when its judge engages.
+
 ## [0.4.0] - 2026-09-25
 
 ### Added
@@ -184,7 +210,8 @@ the Go tag). Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1
   typed capability manifests, loud `*UnsupportedError` rejection, and
   `--json` envelopes carrying `schema_version`.
 
-[Unreleased]: https://github.com/agent-ecosystem/agentsummons/compare/v0.3.5...HEAD
+[Unreleased]: https://github.com/agent-ecosystem/agentsummons/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/agent-ecosystem/agentsummons/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/agent-ecosystem/agentsummons/compare/v0.3.5...v0.4.0
 [0.3.5]: https://github.com/agent-ecosystem/agentsummons/compare/v0.3.4...v0.3.5
 [0.3.4]: https://github.com/agent-ecosystem/agentsummons/compare/v0.3.3...v0.3.4
